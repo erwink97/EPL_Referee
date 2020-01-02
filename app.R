@@ -61,12 +61,6 @@ ui <- fluidPage(
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
-         # textInput(inputId="sel_team",
-         #           label="Choose your Team",
-         #           value=""),
-         # textInput(inputId="opp_team",
-         #           label="Choose your Opponent",
-         #           value=""),
          selectInput(inputId="sel_team",
                      label="Choose your Team",
                      choices=n),
@@ -185,12 +179,7 @@ server <- function(input, output) {
                   from new_data2")
   new_data2 <- sqldf(query2)
   
-  # Sort the dates and merge them
-  # Sorting seems to be done automatically
-  # new_data$date <- as.Date(new_data$date,"%d/%m/%Y")
-  # new_data2$opp_date <- as.Date(new_data2$opp_date,"%d/%m/%Y")
-  # new_data <- new_data[order(new_data$date),]
-  # new_data2 <- new_data2[order(new_data2$opp_date),]
+  
   final_data <- cbind(new_data,new_data2) %>% mutate(res=(goal_diff-opp_goal_diff))
   
   # Some more summary statistics
@@ -309,10 +298,6 @@ server <- function(input, output) {
   })
   
   
-  observeEvent(input$action, {
-    print("The action button has been clicked")
-  })
-  
   # Get name of referee
   output$top_ref <- renderText({
     # as.character(top_referee())
@@ -359,16 +344,8 @@ server <- function(input, output) {
     c('<img src="',src,'" width="450px" height="320px"  ">')
   })
   
-  # # This was created for testing. It is no longer needed
-  # output$test <- renderTable({
-  #   get_info()
-  # })
   
 }
 
 # Run the application 
-if (interactive()) {
-  shinyApp(ui = ui, server = server)
-}
-
 shinyApp(ui = ui, server = server)
